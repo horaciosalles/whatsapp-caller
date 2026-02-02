@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Link Generator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        /* Combined styles for a and button */
+        .whatsapp-link { 
+            display: inline-block;
+            background-color: #25D366;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: none; /* Explicitly removed button border */
+        }
+        .whatsapp-link:hover {
+            background-color: #1DA851;
+        }
+        /* Combined hidden state styles */
+        .whatsapp-link:empty, .whatsapp-link:disabled { 
+            display: none; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <label for="phoneInput">Enter Phone Number:</label>
+        <form id="form"> 
+            <input type="text" id="phoneInput" placeholder="e.g., 11987654321" inputmode="numeric">
+            <button type="submit" id="whatsappLink" class="whatsapp-link" rel="noopener noreferrer">
+                Open WhatsApp Chat
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const phoneInput = document.getElementById('phoneInput');
+        const whatsappLink = document.getElementById('whatsappLink');
+        const form = document.getElementById('form');
+
+        function updateLink() {
+            const rawValue = phoneInput.value;
+            const phoneNumber = rawValue.replace(/\D/g, ''); 
+
+            if (phoneNumber) {
+                // Guaranteed structure: wa.me followed by number and message
+                const fullUrl = "http://wa.me/" + "55" + phoneNumber + "?text=Olá,%20Dr%20Horacio%20aqui.";
+                
+                whatsappLink.setAttribute('data-href', fullUrl); 
+                whatsappLink.style.display = 'inline-block'; 
+                whatsappLink.disabled = false; 
+            } else {
+                whatsappLink.removeAttribute('data-href');
+                whatsappLink.style.display = 'none'; 
+                whatsappLink.disabled = true; 
+            }
+        }
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            const targetUrl = whatsappLink.getAttribute('data-href');
+            if (targetUrl) {
+                window.open(targetUrl, '_blank', 'noopener noreferrer');
+            }
+        });
+
+        phoneInput.addEventListener('input', updateLink);
+        updateLink();
+    </script>
+
+</body>
+</html>
